@@ -14,7 +14,7 @@ public class ServiceImpl implements Service {
 
     @Override
     public void subscribe(BankCard card) {
-        var subscriptions = DB.getOrDefault(card.getUser(), DB.put(card.getUser(), new ArrayList<>()));
+        var subscriptions = DB.computeIfAbsent(card.getUser(), u -> new ArrayList<>());
         subscriptions.add(new Subscription(card.getNumber(), LocalDate.now()));
     }
 
