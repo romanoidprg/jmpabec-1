@@ -8,9 +8,9 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.BiFunction;
 
-public class BankImpl implements Bank {
+public class NewBankImpl implements Bank {
     private final Map<BankCardType, BiFunction<String, User, BankCard>> creators = new HashMap<>();
-    public BankImpl() {
+    public NewBankImpl() {
         creators.put(BankCardType.CREDIT, CreditBankCard::new);
         creators.put(BankCardType.DEBIT, DebitBankCard::new);
     }

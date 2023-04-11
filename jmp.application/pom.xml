@@ -21,22 +21,18 @@
         <dependency>
             <groupId>com.epam.jmpabec</groupId>
             <artifactId>jmp-dto</artifactId>
-            <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.epam.jmpabec</groupId>
             <artifactId>jmp-cloud-service-impl</artifactId>
-            <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.epam.jmpabec</groupId>
             <artifactId>jmp-cloud-bank-impl</artifactId>
-            <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.epam.jmpabec</groupId>
-            <artifactId>jmp-dto</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <artifactId>jmp-bank-api</artifactId>
         </dependency>
     </dependencies>
 

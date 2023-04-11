@@ -1,16 +1,19 @@
-package com.epam.jmpabec;
+package com.epam.jmpabec.app;
 
-import com.epam.jmpabec.bank.impl.BankImpl;
+import com.epam.jmpabec.bank.api.Bank;
 import com.epam.jmpabec.dto.BankCard;
 import com.epam.jmpabec.dto.BankCardType;
 import com.epam.jmpabec.dto.Subscription;
 import com.epam.jmpabec.dto.User;
 import com.epam.jmpabec.service.api.Service;
+import com.epam.jmpabec.service.api.SubscriptionNotFoundException;
 import com.epam.jmpabec.service.impl.ServiceImpl;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ServiceLoader;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class Main {
@@ -21,7 +24,10 @@ public class Main {
         var users = List.of(dart, sasha, chewbacca);
         var cards = new ArrayList<BankCard>();
 
-        final var prior = new BankImpl();
+        ServiceLoader<Bank> banks = ServiceLoader.load(Bank.class);
+        System.out.println("Bank implementations:");
+        banks.forEach(b -> System.out.println(b.getClass().toString()));
+        Bank prior = banks.iterator().next();
         final var service = new ServiceImpl();
 
         users.forEach(u -> {
@@ -50,9 +56,23 @@ public class Main {
         System.out.println();
 
         cards.forEach(c -> System.out.println(c.getNumber() + " " + c.getUser()));
+        System.out.println();
+
         service.getSubscriptionByBankCardNumber(cards.get(0).getNumber()).ifPresentOrElse(Main::prSscr, Main::prNoSscr);
         service.getSubscriptionByBankCardNumber(cards.get(2).getNumber()).ifPresentOrElse(Main::prSscr, Main::prNoSscr);
         service.getSubscriptionByBankCardNumber(cards.get(5).getNumber()).ifPresentOrElse(Main::prSscr, Main::prNoSscr);
+        System.out.println();
+
+        try {
+            service.getSubscriptionByBankCardNumber("no_existable_number").orElseThrow(SubscriptionNotFoundException::new);
+        } catch (SubscriptionNotFoundException e) {
+            System.out.println(e.getMessage());;
+        }
+        System.out.println();
+
+        System.out.println("Subscriptions created in spring:");
+        Predicate<Subscription> condition = s -> s.getStartDate().getMonth().getValue() >= 2;
+        service.getAllSubscriptionsByCondition(condition).forEach(Main::prSscr);
     }
 
     private static void prSscr(Subscription subscription) {
